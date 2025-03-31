@@ -1,0 +1,104 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Tiêu đề -->
+        <EditText
+            android:id="@+id/edtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tiêu đề"
+            android:textSize="20sp"
+            android:background="@drawable/edittext_background"
+            android:padding="12dp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Thanh chọn phân loại -->
+        <RadioGroup
+            android:id="@+id/categoryGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="12dp">
+
+            <RadioButton
+                android:id="@+id/rbWork"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Công việc"
+                android:backgroundTint="#FF9800"
+                android:buttonTint="#FF9800" />
+
+            <RadioButton
+                android:id="@+id/rbStudy"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Học tập"
+                android:backgroundTint="#3F51B5"
+                android:buttonTint="#3F51B5" />
+
+            <RadioButton
+                android:id="@+id/rbPersonal"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Cá nhân"
+                android:backgroundTint="#4CAF50"
+                android:buttonTint="#4CAF50" />
+        </RadioGroup>
+
+        <!-- Mô tả -->
+        <EditText
+            android:id="@+id/edtDescription"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:gravity="top|start"
+            android:hint="Mô tả"
+            android:inputType="textMultiLine"
+            android:textSize="16sp"
+            android:background="@drawable/edittext_background"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Chọn ảnh -->
+        <Button
+            android:id="@+id/btnPickImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chọn ảnh" />
+
+        <ImageView
+            android:id="@+id/imageViewPreview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:background="@android:color/darker_gray" />
+
+        <!-- Chọn ngày -->
+        <Button
+            android:id="@+id/btnPickDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chọn ngày thực hiện" />
+
+        <!-- Lưu -->
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lưu Task"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</ScrollView>
