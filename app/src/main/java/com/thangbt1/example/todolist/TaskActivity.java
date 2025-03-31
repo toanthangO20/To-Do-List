@@ -109,6 +109,12 @@ public class TaskActivity extends AppCompatActivity {
 
         btnSave.setOnClickListener(v -> {
             String title = edtTitle.getText().toString().trim();
+            if (title.isEmpty()) {
+                edtTitle.setError("Tiêu đề không được để trống");
+                edtTitle.requestFocus();
+                return;
+            }
+
             String desc = edtDescription.getText().toString().trim();
 
             String category = "";

@@ -1,6 +1,7 @@
 package com.thangbt1.example.todolist;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     ListView listViewTasks;
     Spinner spinnerFilter;
-    Button btnAddTask;
+    Button btnAddTask, btnDeleteTasks;
 
     List<Task> allTasks = new ArrayList<>();
     TaskAdapter adapter;
@@ -47,11 +48,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 🆕 Thiết lập Toolbar làm AppBar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         listViewTasks = findViewById(R.id.listViewTasks);
         spinnerFilter = findViewById(R.id.spinnerFilter);
         btnAddTask = findViewById(R.id.btnAddTask);
+        btnDeleteTasks = findViewById(R.id.btnDeleteTasks);
+        btnDeleteTasks.setVisibility(View.GONE);
 
-        // Load task từ SharedPreferences
         loadTasksFromStorage();
 
         adapter = new TaskAdapter(this, allTasks);
@@ -76,13 +82,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         listViewTasks.setOnItemLongClickListener((parent, view, position, id) -> {
-            allTasks.remove(position);
-            adapter.notifyDataSetChanged();
-            saveTasksToStorage();
+            adapter.setShowCheckboxes(true);
+            btnDeleteTasks.setVisibility(View.VISIBLE);
             return true;
         });
 
         listViewTasks.setOnItemClickListener((parent, view, position, id) -> {
+            if (adapter.isShowCheckboxes()) return;
+
             Task selectedTask = adapter.getItem(position);
 
             View dialogView = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_task_detail, null);
@@ -126,9 +133,41 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("edit_position", position);
                         startActivityForResult(intent, REQUEST_CODE_EDIT_TASK);
                     })
+                    .setNeutralButton("Xóa task", (dialog, which) -> {
+                        allTasks.remove(position);
+                        adapter.notifyDataSetChanged();
+                        saveTasksToStorage();
+                    })
                     .setNegativeButton("Đóng", null)
                     .show();
         });
+
+        btnDeleteTasks.setOnClickListener(v -> {
+            List<Task> selected = adapter.getCheckedTasks();
+            allTasks.removeAll(selected);
+            adapter.setShowCheckboxes(false);
+            btnDeleteTasks.setVisibility(View.GONE);
+            adapter.notifyDataSetChanged();
+            saveTasksToStorage();
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (adapter != null && adapter.isShowCheckboxes()) {
+            adapter.setShowCheckboxes(false);
+            btnDeleteTasks.setVisibility(View.GONE);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void onTaskCheckedChanged() {
+        if (adapter.getCheckedTasks().size() > 0) {
+            btnDeleteTasks.setVisibility(View.VISIBLE);
+        } else {
+            btnDeleteTasks.setVisibility(View.GONE);
+        }
     }
 
     void filterTasks(String category) {
@@ -165,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void saveTasksToStorage() {
+    public void saveTasksToStorage() {
         SharedPreferences prefs = getSharedPreferences("task_prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();

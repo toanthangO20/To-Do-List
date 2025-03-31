@@ -8,6 +8,7 @@ public class Task implements Serializable {
     private String category;
     private String imageUri;
     private long dueTimeMillis;
+    private boolean completed;
 
     public Task(String title, String description, String category, String imageUri, long dueTimeMillis) {
         this.title = title;
@@ -15,12 +16,34 @@ public class Task implements Serializable {
         this.category = category;
         this.imageUri = imageUri;
         this.dueTimeMillis = dueTimeMillis;
+        this.completed = false;
     }
 
-    public String getTitle() { return title; }
-    public String getDescription() { return description; }
-    public String getCategory() { return category; }
-    public String getImageUri() { return imageUri; }
-    public long getDueTimeMillis() { return dueTimeMillis; }
-}
+    public String getTitle() {
+        return title;
+    }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public long getDueTimeMillis() {
+        return dueTimeMillis;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+}
